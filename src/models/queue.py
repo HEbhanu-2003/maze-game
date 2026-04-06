@@ -8,7 +8,6 @@ class Queue:
     def dequeue(self):
         if not self.is_empty():
             return self.data.pop(0)
-        return None
 
     def is_empty(self):
         return len(self.data) == 0
