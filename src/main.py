@@ -14,6 +14,7 @@ HEIGHT = ROWS * CELL_SIZE
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Solver: AI Animation (SPACE to Toggle)")
 
+# --- UPDATED COLORS ---
 WHITE = (255, 255, 255)
 BLACK = (20, 20, 20)
 GREEN = (46, 204, 113)
@@ -21,7 +22,8 @@ RED = (231, 76, 60)
 BLUE = (52, 152, 219)
 YELLOW = (241, 196, 15)
 CYAN = (52, 231, 228)
-
+BROWN = (139, 69, 19)
+WATER_BLUE = (0, 105, 148)
 
 def draw_maze():
     for r in range(ROWS):
@@ -29,18 +31,16 @@ def draw_maze():
             x = c * CELL_SIZE
             y = r * CELL_SIZE
 
-            if maze[r][c] == '#':
-                color = BLACK
-            elif maze[r][c] == 'S':
-                color = GREEN
-            elif maze[r][c] == 'E':
-                color = RED
-            else:
-                color = WHITE
+            tile = maze[r][c]
+            if tile == '#': color = BLACK
+            elif tile == 'S': color = GREEN
+            elif tile == 'E': color = RED
+            elif tile == 'M': color = BROWN     # Mud tile
+            elif tile == 'W': color = WATER_BLUE # Water tile
+            else: color = WHITE
 
             pygame.draw.rect(screen, color, (x, y, CELL_SIZE, CELL_SIZE))
             pygame.draw.rect(screen, BLUE, (x, y, CELL_SIZE, CELL_SIZE), 1)
-
 
 def draw_path(path, color):
     if not path:
@@ -52,7 +52,6 @@ def draw_path(path, color):
             y = r * CELL_SIZE + padding
             size = CELL_SIZE - (padding * 2)
             pygame.draw.rect(screen, color, (x, y, size, size))
-
 
 def run_game():
     graph = build_graph()
@@ -92,13 +91,11 @@ def run_game():
                     current_step += 1
 
             animated_path = path[:current_step]
-
             color = YELLOW if show_dijkstra else CYAN
             draw_path(animated_path, color)
 
         pygame.display.update()
         clock.tick(60)
-
 
 if __name__ == "__main__":
     run_game()
