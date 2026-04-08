@@ -1,6 +1,6 @@
 from models.graph import Graph
 
-# M = Mud, W = Water
+# S=Start, E=End, #=Wall, M=Mud, W=Water
 maze = [
     ['S', '.', 'W', '.'],
     ['.', 'W', '.', '.'],
@@ -10,6 +10,7 @@ maze = [
 rows = len(maze)
 cols = len(maze[0])
 CELL_SIZE = 80
+
 
 def is_valid(r, c):
     return 0 <= r < rows and 0 <= c < cols and maze[r][c] != '#'
@@ -42,21 +43,11 @@ def build_graph():
 
                         target_tile = maze[nr][nc]
                         if target_tile == 'W':
-                            weight = 10  # High cost
+                            weight = 10
                         elif target_tile == 'M':
-                            weight = 5  # Medium cost
+                            weight = 5
                         else:
-                            weight = 1  # Low cost
+                            weight = 1
 
                         graph.add_edge(current, neighbor, weight)
     return graph
-
-
-def display_maze(maze, path=None):
-    for r in range(len(maze)):
-        for c in range(len(maze[0])):
-            if path and (r, c) in path and maze[r][c] not in ['S', 'E']:
-                print('*', end=' ')
-            else:
-                print(maze[r][c], end=' ')
-        print()
