@@ -1,45 +1,57 @@
 from models.heap import MinHeap
 
+
 def dijkstra(graph, start, end):
     heap = MinHeap()
-    heap.insert((0, start))  # (distance, node)
+    heap.insert((0, start))
 
     distances = {}
     parent = {}
 
-    # Initialize distances
     for node in graph.adj_list:
         distances[node] = float('inf')
 
-    distances[start] = 0
+    if start not in distances:
+        distances[start] = 0
+    else:
+        distances[start] = 0
+
+    if end not in distances:
+        distances[end] = float('inf')
+
+    found = False
 
     while not heap.is_empty():
-        current_distance, current_node = heap.extract_min()
-
-        # If reached destination
-        if current_node == end:
+        current_data = heap.extract_min()
+        if not current_data:
             break
 
-        for neighbor, weight in graph.adj_list[current_node]:
+        current_distance, current_node = current_data
+
+        if current_node == end:
+            found = True
+            break
+
+        for neighbor, weight in graph.adj_list.get(current_node, []):
             new_distance = current_distance + weight
 
-            if new_distance < distances[neighbor]:
+            if new_distance < distances.get(neighbor, float('inf')):
                 distances[neighbor] = new_distance
                 parent[neighbor] = current_node
-
                 heap.insert((new_distance, neighbor))
 
+    if not found:
+        return None
+
     path = []
-    node = end
+    curr = end
 
-    while node != start:
-        path.append(node)
-        node = parent.get(node)
+    while curr is not None:
+        path.append(curr)
+        if curr == start:
+            break
+        curr = parent.get(curr)
 
-        if node is None:
-            return None
-
-    path.append(start)
     path.reverse()
 
     return path, distances[end]
