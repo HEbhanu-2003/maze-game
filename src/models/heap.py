@@ -21,10 +21,10 @@ class MinHeap:
             return None
 
         if len(self.data) == 1:
-            return self.data.pop(0)
+            return self.data.pop()
 
         root = self.data[0]
-        self.data[0] = self.data.pop(0)
+        self.data[0] = self.data.pop()
 
         self.heapify_down(0)
 
